@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Navbar from "./components/NavBar/index";
+import Home from "./components/Home";
+import Inventory from "./components/Inventory";
+
+import { useDispatch, useSelector } from "react-redux";
+import { fetch_categories } from "./store/inventory/actions";
 
 function App() {
+  const dispatch = useDispatch();
+  dispatch(fetch_categories());
+
+  const categories = useSelector((state) => state.categories);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="flex">
+        <Navbar />
+        <Routes>
+          <Route exact path="/home" element={<Home />} />
+          <Route
+            exact
+            path="/inventory"
+            element={<Inventory categories={categories} />}
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
 export default App;
